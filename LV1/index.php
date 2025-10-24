@@ -28,7 +28,7 @@ for ($page = 2; $page <= 6; $page++) {
     $html_content = file_get_contents($url);
     
     if ($html_content === false) {
-        echo "<p class='error'>❌ Failed to fetch page $page</p>";
+        echo "<p class='error'> Failed to fetch page $page</p>";
         continue;
     }
     
@@ -36,7 +36,7 @@ for ($page = 2; $page <= 6; $page++) {
     $html = str_get_html($html_content);
     
     if (!$html) {
-        echo "<p class='error'>❌ Failed to parse HTML from page $page</p>";
+        echo "<p class='error'> Failed to parse HTML from page $page</p>";
         continue;
     }
     
@@ -123,9 +123,9 @@ for ($page = 2; $page <= 6; $page++) {
         
         if ($rad->save()) {
             $total_saved++;
-            echo "<p class='success'>✅ Saved: " . htmlspecialchars(substr($naziv_rada, 0, 80)) . "...</p>";
+            echo "<p class='success'> Saved: " . htmlspecialchars(substr($naziv_rada, 0, 80)) . "...</p>";
         } else {
-            echo "<p class='error'>❌ Failed to save: " . htmlspecialchars(substr($naziv_rada, 0, 80)) . "...</p>";
+            echo "<p class='error'> Failed to save: " . htmlspecialchars(substr($naziv_rada, 0, 80)) . "...</p>";
         }
         
         usleep(200000);
