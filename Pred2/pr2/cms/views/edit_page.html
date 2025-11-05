@@ -1,0 +1,14 @@
+<!-- # add_page.html -->
+<section class="threeColumns">
+    <article>
+        <p>Primjer nekog teksta.</p>
+        </article>
+    <article class="twoThirds">
+        <h1>Uredi sadržaj</h1>
+        <?php if ($form->isSubmitted() && $form->validate()) {
+        echo '<p>Uredili ste stranicu!</p>';
+        echo '<p><a href="edit_page.php?id=' . $id->getValue() . '">Uredi</a></p>';
+        }?>
+        <?php echo $form; ?>
+    </article>
+</section>

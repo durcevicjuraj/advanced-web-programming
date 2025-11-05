@@ -1,0 +1,13 @@
+<!-- # add_page.html -->
+<section class="threeColumns">
+    <article>
+        <p>Primjer nekog teksta.</p>
+    </article>
+    <article class="twoThirds">
+        <h1>Dodaj novi sadržaj</h1>
+        <?php if ($form->isSubmitted() && $form->validate()) {
+        echo '<p>Stranica je dodana!</p>';
+        }?>
+        <?php echo $form; ?>
+    </article>
+</section>

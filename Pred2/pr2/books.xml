@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Script 13.7- books4.xml -->
+<collection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="collection.xsd">
+<book>
+<title edition="3">PHP Advanced and Object-Oriented Programming: Visual QuickPro Guide</title>
+<author>Larry Ullman</author>
+<year>2012</year>
+<chapter number="1" description="Rade se napredne PHP tehnike">Advanced PHP Techniques</chapter>
+<chapter number="2" pages="23">Developing Web Aplications</chapter>
+<chapter number="3">Advanced Database Concepts</chapter>
+<cover filename="book1.jpg" />
+</book>
+<book>
+<title>Programming PHP, 3rd Edition Creating Dynamic Web Pages</title>
+<author>Kevin Tatroe, Peter MacIntyre, Rasmus Lerdorf</author>
+<year>2013</year>
+<pages>540</pages>
+<chapter number="1" pages="34">Introduction to PHP</chapter>
+<chapter number="2" pages="45">Language Basics</chapter>
+<chapter number="3" pages="56">Functions</chapter>
+<cover filename="book2.jpg" />
+</book> 
+</collection>

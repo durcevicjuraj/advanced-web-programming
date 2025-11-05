@@ -1,0 +1,13 @@
+<!-- # login.html -->
+<section class="threeColumns">
+    <article>
+        <p>Primjer nekog teksta.</p>
+    </article>
+	<article class="twoThirds">
+	    <h1>Login</h1>
+	    <?php if ($form->isSubmitted() && $form->validate()) {
+	        echo '<p class="error">Niste unijeli ispravne vrijednosti za mail ili lozinku!</p>';
+	    }?>
+	    <?php echo $form; ?>
+	</article>
+</section>
