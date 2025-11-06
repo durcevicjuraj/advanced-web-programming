@@ -3,28 +3,8 @@
 $encryption_key = hash('sha256', 'moj_tajni_kljuc_2024');
 $cipher = 'AES-256-CBC';
 
-// Provjera uploada
-if ($_SERVER['REQUEST_METHOD'] != 'POST' || !isset($_FILES['dokument'])) {
-    die("Greška: Neispravan zahtjev");
-}
 
 $file = $_FILES['dokument'];
-
-// Provjera greške
-if ($file['error'] !== UPLOAD_ERR_OK) {
-    die("Greška pri uploadu");
-}
-
-// Validacija tipa
-$ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-if (!in_array($ext, ['pdf', 'jpg', 'jpeg', 'png'])) {
-    die("Nedozvoljen tip datoteke");
-}
-
-// Validacija veličine (5MB)
-if ($file['size'] > 5 * 1024 * 1024) {
-    die("Datoteka prevelika (max 5MB)");
-}
 
 // Učitaj sadržaj
 $content = file_get_contents($file['tmp_name']);
