@@ -1,0 +1,43 @@
+extends ../layout
+
+block content
+  h1= title
+
+  form(method="post", action="/projects/#{project._id}/edit")
+    input(type="hidden", name="_method", value="PUT")
+
+    div
+      label(for="name") Project Name:
+      br
+      input(type="text", name="name", value=project.name, required)
+
+    div
+      label(for="description") Description:
+      br
+      textarea(name="description", rows="4", cols="50", required)= project.description
+
+    div
+      label(for="price") Price:
+      br
+      input(type="number", name="price", step="0.01", value=project.price, required)
+
+    div
+      label(for="completedTasks") Completed Tasks:
+      br
+      textarea(name="completedTasks", rows="3", cols="50")= project.completedTasks
+
+    div
+      label(for="startDate") Start Date:
+      br
+      input(type="date", name="startDate", value=startDate, required)
+
+    div
+      label(for="endDate") End Date:
+      br
+      input(type="date", name="endDate", value=endDate)
+
+    br
+    div
+      button(type="submit") Update Project
+      = ' '
+      a(href="/projects/#{project._id}") Cancel

@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+  h1= title
+  h2 Project: #{project.name}
+
+  form(method="post", action="/projects/#{project._id}/addmember")
+    div
+      label(for="memberName") Team Member Name:
+      br
+      input(type="text", name="memberName", required)
+
+    br
+    div
+      button(type="submit") Add Member
+      = ' '
+      a(href="/projects/#{project._id}") Cancel

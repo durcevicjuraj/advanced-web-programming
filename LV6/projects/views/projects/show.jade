@@ -1,0 +1,44 @@
+extends ../layout
+
+block content
+  h1 Project Details
+
+  dl
+    dt Project Name:
+    dd= project.name
+
+    dt Description:
+    dd= project.description
+
+    dt Price:
+    dd= project.price
+
+    dt Completed Tasks:
+    dd= project.completedTasks || 'None'
+
+    dt Start Date:
+    dd= startDate
+
+    dt End Date:
+    dd= endDate || 'Not set'
+
+    dt Team Members:
+    dd
+      if project.teamMembers && project.teamMembers.length > 0
+        ul
+          each member in project.teamMembers
+            li= member
+      else
+        | No team members yet
+      p
+        a(href="/projects/#{project._id}/addmember") Add Team Member
+
+  br
+  p
+    a(href="/projects/#{project._id}/edit") Edit
+    = ' | '
+    a(href="/projects") Back to List
+    = ' | '
+    form(method="post", action="/projects/#{project._id}", style="display:inline")
+      input(type="hidden", name="_method", value="DELETE")
+      button(type="submit", onclick="return confirm('Are you sure?')") Delete

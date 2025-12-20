@@ -1,0 +1,41 @@
+extends ../layout
+
+block content
+  h1= title
+
+  form(method="post", action="/projects")
+    div
+      label(for="name") Project Name:
+      br
+      input(type="text", name="name", required)
+
+    div
+      label(for="description") Description:
+      br
+      textarea(name="description", rows="4", cols="50", required)
+
+    div
+      label(for="price") Price:
+      br
+      input(type="number", name="price", step="0.01", required)
+
+    div
+      label(for="completedTasks") Completed Tasks:
+      br
+      textarea(name="completedTasks", rows="3", cols="50")
+
+    div
+      label(for="startDate") Start Date:
+      br
+      input(type="date", name="startDate", required)
+
+    div
+      label(for="endDate") End Date:
+      br
+      input(type="date", name="endDate")
+
+    br
+    div
+      button(type="submit") Create Project
+      = ' '
+      a(href="/projects") Cancel

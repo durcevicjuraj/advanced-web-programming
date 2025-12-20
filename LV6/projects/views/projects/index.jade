@@ -1,0 +1,35 @@
+extends ../layout
+
+block content
+  h1= title
+  p
+    a(href="/projects/new") Add New Project
+
+  if projects.length === 0
+    p No projects found.
+  else
+    table(border="1", cellpadding="10")
+      thead
+        tr
+          th Name
+          th Description
+          th Price
+          th Start Date
+          th End Date
+          th Actions
+      tbody
+        each project in projects
+          tr
+            td= project.name
+            td= project.description
+            td= project.price
+            td= project.startDate ? project.startDate.toISOString().substring(0, 10) : ''
+            td= project.endDate ? project.endDate.toISOString().substring(0, 10) : ''
+            td
+              a(href="/projects/#{project._id}") Show
+              = ' | '
+              a(href="/projects/#{project._id}/edit") Edit
+              = ' | '
+              form(method="post", action="/projects/#{project._id}", style="display:inline")
+                input(type="hidden", name="_method", value="DELETE")
+                button(type="submit", onclick="return confirm('Are you sure?')") Delete
