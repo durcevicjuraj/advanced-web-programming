@@ -44,7 +44,9 @@ router.route('/')
         completedTasks : req.body.completedTasks,
         startDate : req.body.startDate,
         endDate : req.body.endDate,
-        teamMembers : []
+        teamMembers : [],
+        leader : req.session.userId,
+        archived : false
       });
       console.log('POST creating new project: ' + project);
       res.format({
@@ -64,6 +66,54 @@ router.route('/')
 // GET new project form (must be before /:id routes)
 router.get('/new', function(req, res) {
   res.render('projects/new', { title: 'Add New Project' });
+});
+
+// GET projects where user is leader
+router.get('/myprojects', async function(req, res) {
+  try {
+    const projects = await mongoose.model('Project').find({ leader: req.session.userId, archived: false });
+    res.render('projects/myprojects', {
+      title: 'My Projects (Leader)',
+      projects: projects
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error retrieving projects');
+  }
+});
+
+// GET projects where user is team member
+router.get('/memberprojects', async function(req, res) {
+  try {
+    const projects = await mongoose.model('Project').find({ teamMembers: req.session.userId, archived: false });
+    res.render('projects/memberprojects', {
+      title: 'My Projects (Member)',
+      projects: projects
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error retrieving projects');
+  }
+});
+
+// GET archived projects where user is leader or member
+router.get('/archive', async function(req, res) {
+  try {
+    const projects = await mongoose.model('Project').find({
+      archived: true,
+      $or: [
+        { leader: req.session.userId },
+        { teamMembers: req.session.userId }
+      ]
+    }).populate('leader');
+    res.render('projects/archive', {
+      title: 'Archived Projects',
+      projects: projects
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error retrieving archived projects');
+  }
 });
 
 // Validate :id parameter
@@ -107,9 +157,11 @@ router.param('id', async function(req, res, next, id) {
 router.get('/:id/addmember', async function(req, res) {
   try {
     const project = await mongoose.model('Project').findById(req.id);
+    const users = await mongoose.model('User').find({});
     res.render('projects/addmember', {
       title: 'Add Team Member',
-      "project" : project
+      "project" : project,
+      "users" : users
     });
   } catch (err) {
     console.log('GET Error: There was a problem retrieving: ' + err);
@@ -121,13 +173,38 @@ router.get('/:id/addmember', async function(req, res) {
 router.post('/:id/addmember', async function(req, res) {
   try {
     const project = await mongoose.model('Project').findById(req.id);
-    project.teamMembers.push(req.body.memberName);
+    project.teamMembers.push(req.body.memberId);
     await project.save();
     res.redirect("/projects/" + project._id);
   } catch (err) {
     res.send("There was a problem adding the team member: " + err);
   }
 });
+
+// GET/PUT edit tasks (for team members - only completedTasks)
+router.route('/:id/edittasks')
+  .get(async function(req, res) {
+    try {
+      const project = await mongoose.model('Project').findById(req.id);
+      res.render('projects/edittasks', {
+        title: 'Edit Completed Tasks',
+        project: project
+      });
+    } catch (err) {
+      console.log('GET Error: ' + err);
+      res.status(500).send('Error retrieving project');
+    }
+  })
+  .put(async function(req, res) {
+    try {
+      await mongoose.model('Project').findByIdAndUpdate(req.id, {
+        completedTasks: req.body.completedTasks
+      });
+      res.redirect('/projects/memberprojects');
+    } catch (err) {
+      res.send("There was a problem updating: " + err);
+    }
+  });
 
 // GET edit form and PUT update (must be before /:id route)
 router.route('/:id/edit')
@@ -164,7 +241,8 @@ router.route('/:id/edit')
         price : req.body.price,
         completedTasks : req.body.completedTasks,
         startDate : req.body.startDate,
-        endDate : req.body.endDate
+        endDate : req.body.endDate,
+        archived : req.body.archived === 'on'
       }, { new: true });
       res.format({
         html: function(){
@@ -183,7 +261,7 @@ router.route('/:id/edit')
 router.route('/:id')
   .get(async function(req, res) {
     try {
-      const project = await mongoose.model('Project').findById(req.id);
+      const project = await mongoose.model('Project').findById(req.id).populate('teamMembers').populate('leader');
       console.log('GET Retrieving ID: ' + project._id);
       var startDate = project.startDate ? project.startDate.toISOString().substring(0, 10) : '';
       var endDate = project.endDate ? project.endDate.toISOString().substring(0, 10) : '';

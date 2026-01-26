@@ -36,6 +36,11 @@ block content
       br
       input(type="date", name="endDate", value=endDate)
 
+    div
+      label(for="archived")
+        input(type="checkbox", name="archived", id="archived", checked=project.archived)
+        |  Archived
+
     br
     div
       button(type="submit") Update Project

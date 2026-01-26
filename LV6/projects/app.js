@@ -4,13 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var methodOverride = require('method-override');
+var session = require('express-session');
 
 var db = require('./model/db');
+var user = require('./model/users');
 var project = require('./model/projects');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var projectsRouter = require('./routes/projects');
+var authRouter = require('./routes/auth');
 
 var app = express();
 
@@ -22,6 +25,11 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: false
+}));
 app.use(methodOverride(function(req, res){
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
     var method = req.body._method;
@@ -31,9 +39,24 @@ app.use(methodOverride(function(req, res){
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Make user session available in views
+app.use(function(req, res, next) {
+  res.locals.currentUser = req.session.userId ? { _id: req.session.userId, username: req.session.username } : null;
+  next();
+});
+
+// Auth middleware
+function requireLogin(req, res, next) {
+  if (!req.session.userId) {
+    return res.redirect('/auth/login');
+  }
+  next();
+}
+
 app.use('/', indexRouter);
+app.use('/auth', authRouter);
 app.use('/users', usersRouter);
-app.use('/projects', projectsRouter);
+app.use('/projects', requireLogin, projectsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

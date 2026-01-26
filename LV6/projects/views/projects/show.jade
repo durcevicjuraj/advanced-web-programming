@@ -22,16 +22,22 @@ block content
     dt End Date:
     dd= endDate || 'Not set'
 
+    dt Leader:
+    dd= project.leader ? project.leader.username : 'Not assigned'
+
     dt Team Members:
     dd
       if project.teamMembers && project.teamMembers.length > 0
         ul
           each member in project.teamMembers
-            li= member
+            li= member.username
       else
         | No team members yet
       p
         a(href="/projects/#{project._id}/addmember") Add Team Member
+
+    dt Archived:
+    dd= project.archived ? 'Yes' : 'No'
 
   br
   p

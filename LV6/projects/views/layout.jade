@@ -4,4 +4,21 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+    nav
+      if currentUser
+        span Welcome, #{currentUser.username}! |
+        a(href='/projects') All Projects
+        |  |
+        a(href='/projects/myprojects') My Projects (Leader)
+        |  |
+        a(href='/projects/memberprojects') My Projects (Member)
+        |  |
+        a(href='/projects/archive') Archive
+        |  |
+        a(href='/auth/logout') Logout
+      else
+        a(href='/auth/login') Login
+        |  |
+        a(href='/auth/register') Register
+    hr
     block content

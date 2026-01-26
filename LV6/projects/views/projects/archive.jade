@@ -1,0 +1,31 @@
+extends ../layout
+
+block content
+  h1= title
+
+  if projects && projects.length > 0
+    table(border="1")
+      thead
+        tr
+          th Name
+          th Description
+          th Leader
+          th Start Date
+          th End Date
+          th Actions
+      tbody
+        each project in projects
+          tr
+            td= project.name
+            td= project.description
+            td= project.leader ? project.leader.username : 'N/A'
+            td= project.startDate ? project.startDate.toISOString().substring(0, 10) : ''
+            td= project.endDate ? project.endDate.toISOString().substring(0, 10) : ''
+            td
+              a(href="/projects/#{project._id}") View
+  else
+    p No archived projects found.
+
+  br
+  p
+    a(href="/projects") All Projects

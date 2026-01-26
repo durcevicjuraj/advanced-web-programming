@@ -1,0 +1,33 @@
+extends ../layout
+
+block content
+  h1= title
+
+  if projects && projects.length > 0
+    table(border="1")
+      thead
+        tr
+          th Name
+          th Description
+          th Price
+          th Start Date
+          th Actions
+      tbody
+        each project in projects
+          tr
+            td= project.name
+            td= project.description
+            td= project.price
+            td= project.startDate ? project.startDate.toISOString().substring(0, 10) : ''
+            td
+              a(href="/projects/#{project._id}") View
+              |  |
+              a(href="/projects/#{project._id}/edit") Edit
+  else
+    p No projects found where you are the leader.
+
+  br
+  p
+    a(href="/projects/new") Create New Project
+    |  |
+    a(href="/projects") All Projects

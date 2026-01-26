@@ -1,0 +1,19 @@
+extends ../layout
+
+block content
+  h1= title
+  h2 Project: #{project.name}
+
+  form(method="post", action="/projects/#{project._id}/edittasks")
+    input(type="hidden", name="_method", value="PUT")
+
+    div
+      label(for="completedTasks") Completed Tasks:
+      br
+      textarea(name="completedTasks", rows="6", cols="50")= project.completedTasks
+
+    br
+    div
+      button(type="submit") Update Tasks
+      = ' '
+      a(href="/projects/memberprojects") Cancel

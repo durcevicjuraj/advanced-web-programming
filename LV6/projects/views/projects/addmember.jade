@@ -6,9 +6,12 @@ block content
 
   form(method="post", action="/projects/#{project._id}/addmember")
     div
-      label(for="memberName") Team Member Name:
+      label(for="memberId") Select Team Member:
       br
-      input(type="text", name="memberName", required)
+      select(name="memberId", required)
+        option(value="") -- Select User --
+        each user in users
+          option(value=user._id)= user.username
 
     br
     div

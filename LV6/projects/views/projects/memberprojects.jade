@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  h1= title
+
+  if projects && projects.length > 0
+    table(border="1")
+      thead
+        tr
+          th Name
+          th Description
+          th Completed Tasks
+          th Actions
+      tbody
+        each project in projects
+          tr
+            td= project.name
+            td= project.description
+            td= project.completedTasks || 'None'
+            td
+              a(href="/projects/#{project._id}") View
+              |  |
+              a(href="/projects/#{project._id}/edittasks") Edit Tasks
+  else
+    p No projects found where you are a team member.
+
+  br
+  p
+    a(href="/projects") All Projects
